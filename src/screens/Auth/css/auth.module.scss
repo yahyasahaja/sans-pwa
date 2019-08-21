@@ -1,0 +1,58 @@
+.container {
+  display: flex;
+  height: 100vh;
+  position: relative;
+
+  .left {
+    display: block;
+    width: 100%;
+    padding: 20px;
+    position: relative;
+    color: white;
+    padding-left: 100px;
+
+    .title {
+      font-size: 50pt;
+      font-weight: 100;
+      margin-top: 100px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: .3s;
+      display: block;
+
+      &:visited {
+        color: white;
+      }
+
+      &:active {
+        opacity: .3;
+        transition: .1s;
+      }
+
+      &:hover {
+        transform: translateY(-10px);
+      }
+    }
+
+    .desc {
+      font-size: 14pt;
+    }
+  }
+
+  .right {
+    display: block;
+    min-width: 500px;
+    background: white;
+    padding: 20px;
+  }
+
+  .wrapper {
+    position: relative;
+    background: white;
+    padding: 30px;
+
+    .content {
+      display: block;
+    }
+  }
+}

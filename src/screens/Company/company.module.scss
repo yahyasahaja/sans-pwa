@@ -1,0 +1,64 @@
+.wrapper {
+  display: block;
+
+  .info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    &:visited {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .title {
+      margin-left: 20px;
+      font-weight: bold;
+      display: flex;
+      width: 100px;
+    }
+
+    .logo {
+      height: 45px;
+      padding: 10px 0;
+  
+      img {
+        height: 100%;
+      }
+    }
+  }
+
+  .container {
+    display: block;
+    background: white;
+    position: relative;
+    min-height: 100vh;
+  }
+}
+
+.list {
+  color: inherit;
+}
+
+.icon {
+  width: 1em;
+  height: 1em;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: white;
+}
+
+.lists span {
+
+  .icon {
+    width: 1em;
+    height: 1em;
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+}
+
+.divider {
+  background: rgba(138, 138, 138, 0.35);
+}
