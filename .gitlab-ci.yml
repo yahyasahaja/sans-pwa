@@ -46,7 +46,7 @@ Deploy to Staging:
     - echo "$SSH_PRIVATE_KEY" >> ~/.ssh/id_dsa
     - chmod 600 ~/.ssh/id_dsa
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-    - rsync -rav build ubuntu@sans.ngopi.men:sansapp/client/staging/build
+    - rsync -rav build ubuntu@sans.ngopi.men:sansapp/client/staging/
   only:
     - develop
 
@@ -59,6 +59,6 @@ Deploy to Production:
     - echo "$SSH_PRIVATE_KEY" >> ~/.ssh/id_dsa
     - chmod 600 ~/.ssh/id_dsa
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-    - rsync -rav build ubuntu@sans.ngopi.men:sansapp/client/prod/build
+    - rsync -rav build ubuntu@sans.ngopi.men:sansapp/client/prod/
   only:
     - master
