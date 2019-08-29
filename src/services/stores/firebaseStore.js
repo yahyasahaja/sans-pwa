@@ -24,7 +24,7 @@ class Firebase {
   monitorStateChanged() {
     firebase.auth().onAuthStateChanged(async () => {
       if (firebase.auth().currentUser) {
-        this.user = this.getUser(await firebase.auth().currentUser.uid)
+        // this.user = this.getUser(await firebase.auth().currentUser.uid)
       }
     })
   }

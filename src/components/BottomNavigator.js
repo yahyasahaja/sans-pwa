@@ -5,9 +5,9 @@ import BottomNavigation from '@material-ui/core/BottomNavigation'
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
 import styled from 'styled-components'
 
-import customersState from '../screens/Customers/customersState'
+import customersState from '../screens/Authorized/customersState'
 import styles from './css/bottom-navigator.module.scss'
-import companyState from '../screens/Company/companyState';
+import companyState from '../screens/Company/companyState'
 
 const StyledBottomNavigation = styled(BottomNavigation)`
   && {

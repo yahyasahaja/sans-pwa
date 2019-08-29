@@ -3,6 +3,9 @@ import axios from 'axios'
 import snackbar from './snackbar'
 import token from './token'
 import { BASE_URL } from '../../config'
+import gql from 'graphql-tag'
+import client from '../graphql/client'
+import firebaseStore from './firebaseStore';
 
 class User {
   @observable data = null
@@ -18,32 +21,56 @@ class User {
 
   @action
   async loginWithGoogle() {
-    window.oauthCallback = async access_token => {
-      token.setAccessToken(access_token)
-      await this.getUser()
-    }
-
-    let { protocol, host } = window.location
-    // if (host.indexOf('localhost') === 0) host = 'dev.jobwher.com'
-
-    let url = `${
-      BASE_URL
-    }/oauth2/authorize/google?redirect_uri=${protocol}//${host}/oauth.html`
-    window.open(
-      url,
-      'Oauth Login',
-      'height=800,width=600'
-    )
-  }
-
-  @action
-  async login(email, password) {
     try {
       this.isLoadingLogin = true
 
-      let { data: accessToken } = await axios.post('/auth/login', {
-        email, password
+      let res = await firebaseStore.signInWithGoogle()
+      let idToken = await res.user.getIdToken()
+
+      let accessToken = await this.customerLogin(idToken)
+
+      return accessToken
+    } catch(err) {
+      this.isLoadingLogin = false
+      snackbar.show(err.message)
+      console.log('ERROR WHILE LOGIN WITH GOOGLE', err)
+      return err.response
+    }
+  }
+
+  async loginWithEmailAndPassword(email, password) {
+    try {
+      this.isLoadingLogin = true
+
+      let res = await firebaseStore.signInWithEmailPassword(email, password)
+      let idToken = await res.user.getIdToken()
+
+      let accessToken = this.customerLogin(idToken)
+
+      return accessToken
+    } catch (err) {
+      this.isLoadingLogin = false
+      snackbar.show(err.response.data.message)
+      console.log('ERROR WHILE LOGIN WITH EMAIL AND PASSWORD', err)
+      return err.response
+    }
+  }
+
+  @action
+  async customerLogin(idToken) {
+    try {
+      this.isLoadingLogin = true
+
+      let { data: {
+        customerLogin: accessToken
+      } } = await client.mutate({
+        mutation: customerLoginMutation,
+        variables: {
+          idToken
+        }
       })
+
+      console.log(accessToken)
       
       token.setAccessToken(accessToken)
       await this.getUser()
@@ -52,7 +79,7 @@ class User {
       return accessToken
     } catch(err) {
       this.isLoadingLogin = false
-      snackbar.show(err.response.data.message)
+      snackbar.show(err)
       console.log('ERROR WHILE LOGIN', err)
       return err.response
     }
@@ -82,7 +109,12 @@ class User {
   async getUser() {
     try {
       this.isLoading = true
-      let { data } = await axios.get('/auth/currentuser')
+
+      let { data } = await client.query({
+        query: customerQuery,
+        fetchPolicy: 'network-only',
+      })
+
       this.data = data
       this.isLoading = false
       console.log(data)
@@ -132,5 +164,27 @@ class User {
     this.data = null
   }
 }
+
+const customerLoginMutation = gql`
+  mutation customerLogin($idToken: String! ) {
+    customerLogin(idToken: $idToken)
+  }
+`
+
+const customerQuery = gql`
+  query customer {
+    customer {
+      id
+      uid
+      email
+      name
+      profile_picture
+      payment {
+        name
+        id
+      }
+    }
+  }
+`
 
 export default window.user = new User()

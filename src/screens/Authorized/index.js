@@ -186,7 +186,7 @@ const PosedDrawer = posed(StyledDrawer)({
 })
 
 @observer
-class Customers extends Component {
+class Authorized extends Component {
   @observable isOpened = false
   @observable isShouldLoginDialogOpened = false
   @observable menuRouters = []
@@ -609,4 +609,4 @@ class Customers extends Component {
   }
 }
 
-export default Customers
+export default Authorized

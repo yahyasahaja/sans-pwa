@@ -29,14 +29,15 @@ import { observer } from 'mobx-react'
 import { observe } from 'mobx'
 
 import { BASE_URL, IS_PRODUCTION } from './config'
+import firebaseStore from './services/stores/firebaseStore'
 
 // import Auth from './screens/Auth'
 // import Customers from './screens/Customers'
 // import LandingPage from './screens/LandingPage'
 const Auth = React.lazy(() => import('./screens/Auth'))
-const Customers = React.lazy(() => import('./screens/Customers'))
-const LandingPage = React.lazy(() => import('./screens/LandingPage'))
-const Company = React.lazy(() => import('./screens/Company'))
+const Authorized = React.lazy(() => import('./screens/Authorized'))
+// const LandingPage = React.lazy(() => import('./screens/LandingPage'))
+// const Company = React.lazy(() => import('./screens/Company'))
 
 axios.defaults.baseURL = BASE_URL
 axios.defaults.headers['Accept'] = 'application/json'
@@ -73,6 +74,8 @@ class App extends Component {
       }
     })
     await token.setup()
+    await firebaseStore.init()
+    await firebaseStore.monitorStateChanged()
     if (IS_PRODUCTION) serviceWorker.getNotifPermission()
     serviceWorker.checkAppInstalledStatus()
     console.log('this is the update 1.8')
@@ -105,9 +108,7 @@ class App extends Component {
           <BrowserRouter>
               <Switch>
                 <Route path="/auth" component={Auth} />
-                <Route path="/customers" component={Customers} />
-                <Route path="/company" component={Company} />
-                <Route path="/" component={LandingPage} />
+                <Route path="/" component={Authorized} />
               </Switch>
             </BrowserRouter>
         </Suspense>
